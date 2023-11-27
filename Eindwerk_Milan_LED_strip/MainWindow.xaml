@@ -1,0 +1,17 @@
+﻿<Window x:Class="Eindwerk_Milan_LED_strip.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Eindwerk_Milan_LED_strip"
+        mc:Ignorable="d"
+        Title="Eindwerk LED strip - Milan Blairon" SizeToContent="Height" Width="600"
+        Closing="Window_Closing">
+    <Grid>
+        <ComboBox x:Name="cbxComPorts" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="120" SelectionChanged="cbxComPorts_SelectionChanged"/>
+        <Slider x:Name="sldrInput" HorizontalAlignment="Left" Margin="10,40,0,0" VerticalAlignment="Top" Width="120" Maximum="255" ValueChanged="sldrInput_ValueChanged" IsEnabled="False"/>
+        <Button Content="Set White Color" HorizontalAlignment="Left" Margin="10,70,0,0" VerticalAlignment="Top" Width="120" Click="btnSetWhiteColor_Click"/>
+        <Button Content="Rainbow Cycle" HorizontalAlignment="Left" Margin="10,100,0,0" VerticalAlignment="Top" Width="120" Click="btnRainbowCycle_Click"/>
+    </Grid>
+</Window>
+
