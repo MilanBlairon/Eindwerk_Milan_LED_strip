@@ -8,7 +8,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="abstract-color-graphic-geometric-elements-abstract-backgrounds-free-vector.jpg" />
+    <None Remove="images.jpeg" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="System.IO.Ports" Version="8.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="abstract-color-graphic-geometric-elements-abstract-backgrounds-free-vector.jpg" />
+    <Resource Include="images.jpeg" />
   </ItemGroup>
 
 </Project>

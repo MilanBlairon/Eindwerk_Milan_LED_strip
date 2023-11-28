@@ -5,13 +5,63 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Eindwerk_Milan_LED_strip"
         mc:Ignorable="d"
-        Title="Eindwerk LED strip - Milan Blairon" SizeToContent="Height" Width="600"
-        Closing="Window_Closing">
+        Title="Eindwerk LED strip - Milan Blairon" Height="1080" Width="1920" WindowState="Maximized"
+        Closing="Window_Closing" ResizeMode="CanMinimize">
+    
     <Grid>
-        <ComboBox x:Name="cbxComPorts" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="120" SelectionChanged="cbxComPorts_SelectionChanged"/>
-        <Slider x:Name="sldrInput" HorizontalAlignment="Left" Margin="10,40,0,0" VerticalAlignment="Top" Width="120" Maximum="255" ValueChanged="sldrInput_ValueChanged" IsEnabled="False"/>
+        <Image Source="/abstract-color-graphic-geometric-elements-abstract-backgrounds-free-vector.jpg" Stretch="UniformToFill">
+            <Image.Effect>
+                <BlurEffect Radius="10"/>
+                <!-- De waarde van Radius bepaalt de mate van vervaging -->
+            </Image.Effect>
+        </Image>
+        
+        <StackPanel>
+            <Border BorderBrush="White" BorderThickness="2" Margin="5" CornerRadius="5">
+                <Label 
+                Content="Ledstripproject Milan Blairon" FontSize="50" FontFamily="Montserrat" FontWeight="Bold" 
+                Foreground="White" Margin="5">
+                </Label>
+            </Border>
+            <GroupBox 
+                Name="grpbxCOMPoort" Header="Selecteer COM poort" Margin="5" BorderBrush="White" FontFamily="Montserrat" 
+                FontWeight="Bold" Foreground="White" FontSize="25" BorderThickness="1">
+                <ComboBox 
+                    x:Name="cbxComPorts" Width="1900" Height="Auto" HorizontalAlignment="Left" VerticalAlignment="Center" BorderBrush="White"
+                    BorderThickness="1" Background="White" SelectionChanged="cbxComPorts_SelectionChanged" Foreground="Black">
+                </ComboBox>
+            </GroupBox>
+
+            <StackPanel Orientation="Horizontal">
+            <GroupBox 
+            Name="grpbxBrightness" Header="Stel de lichtsterkte in" Margin="5" BorderBrush="White" FontFamily="Montserrat" 
+            FontWeight="Bold" Foreground="White" FontSize="25" BorderThickness="1">
+                    <Slider 
+                    x:Name="sldrBirghtness" HorizontalAlignment="Left" Margin="5" VerticalAlignment="Top" 
+                    Width="1000" Minimum="1" Maximum="100" ValueChanged="sldrBirghtness_ValueChanged" IsEnabled="False">
+                    </Slider>
+                </GroupBox>
+
+                <GroupBox 
+                Name="grpbxOnOff" Header="Schakel de led strip in of uit" Margin="5" Width="495" BorderBrush="White" FontFamily="Montserrat" 
+                FontWeight="Bold" Foreground="White" FontSize="25" BorderThickness="1">
+                    <Button Name="btnOnOff" Content="Uitgeschakeld" Click="btnOnOff_Click" Margin="5">
+                        <Button.Template>
+                            <ControlTemplate TargetType="Button">
+                                <Border CornerRadius="5" Background="Red" Opacity="0.8" BorderBrush="Black" BorderThickness="1">
+                                    <ContentPresenter HorizontalAlignment="Left" Margin="5" VerticalAlignment="Center"/>
+                                </Border>
+                            </ControlTemplate>
+                        </Button.Template>
+                        <Button.Foreground>
+                            <SolidColorBrush Color="White"></SolidColorBrush>
+                        </Button.Foreground>
+                    </Button>
+                </GroupBox>
+            </StackPanel>
         <Button Content="Set White Color" HorizontalAlignment="Left" Margin="10,70,0,0" VerticalAlignment="Top" Width="120" Click="btnSetWhiteColor_Click"/>
         <Button Content="Rainbow Cycle" HorizontalAlignment="Left" Margin="10,100,0,0" VerticalAlignment="Top" Width="120" Click="btnRainbowCycle_Click"/>
+        </StackPanel>
     </Grid>
 </Window>
 

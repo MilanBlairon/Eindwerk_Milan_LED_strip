@@ -46,18 +46,18 @@ namespace Eindwerk_Milan_LED_strip
                 {
                     _serialPort.PortName = cbxComPorts.SelectedItem.ToString();
                     _serialPort.Open();
-                    sldrInput.IsEnabled = true;
+                    sldrBirghtness.IsEnabled = true;
                 }
                 else
-                    sldrInput.IsEnabled = false;
+                    sldrBirghtness.IsEnabled = false;
             }
         }
 
-        private void sldrInput_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        private void sldrBirghtness_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             byte data = 0;
 
-            for (int i = 0; i < sldrInput.Value; i++)
+            for (int i = 0; i < sldrBirghtness.Value; i++)
             {
                 data <<= 1;
                 data++;
@@ -94,6 +94,11 @@ namespace Eindwerk_Milan_LED_strip
                 _serialPort.Write(new byte[] { 0 }, 0, 1);
                 _serialPort.Dispose();
             }
+        }
+
+        private void btnOnOff_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }
