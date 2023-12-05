@@ -6,16 +6,16 @@
         xmlns:local="clr-namespace:Eindwerk_Milan_LED_strip"
         mc:Ignorable="d"
         Title="Eindwerk LED strip - Milan Blairon" Height="1080" Width="1920" WindowState="Maximized"
-        Closing="Window_Closing" ResizeMode="CanMinimize">
-    
+        Closing="Window_Closing">
+
     <Grid>
-        <Image Source="/abstract-color-graphic-geometric-elements-abstract-backgrounds-free-vector.jpg" Stretch="UniformToFill">
+        <Image Source="/abstract-color-graphic-geometric-elements-abstract-backgrounds-free-vector.jpg" Stretch="UniformToFill" Opacity="0.80">
             <Image.Effect>
-                <BlurEffect Radius="10"/>
+                <BlurEffect Radius="15"/>
                 <!-- De waarde van Radius bepaalt de mate van vervaging -->
             </Image.Effect>
         </Image>
-        
+
         <StackPanel>
             <Border BorderBrush="White" BorderThickness="2" Margin="5" CornerRadius="5">
                 <Label 
@@ -23,6 +23,7 @@
                 Foreground="White" Margin="5">
                 </Label>
             </Border>
+
             <GroupBox 
                 Name="grpbxCOMPoort" Header="Selecteer COM poort" Margin="5" BorderBrush="White" FontFamily="Montserrat" 
                 FontWeight="Bold" Foreground="White" FontSize="25" BorderThickness="1">
@@ -32,23 +33,52 @@
                 </ComboBox>
             </GroupBox>
 
-            <StackPanel Orientation="Horizontal">
-            <GroupBox 
-            Name="grpbxBrightness" Header="Stel de lichtsterkte in" Margin="5" BorderBrush="White" FontFamily="Montserrat" 
-            FontWeight="Bold" Foreground="White" FontSize="25" BorderThickness="1">
-                    <Slider 
-                    x:Name="sldrBirghtness" HorizontalAlignment="Left" Margin="5" VerticalAlignment="Top" 
-                    Width="1000" Minimum="1" Maximum="100" ValueChanged="sldrBirghtness_ValueChanged" IsEnabled="False">
-                    </Slider>
-                </GroupBox>
+            <DockPanel>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <!-- Eerste kolom, neemt de helft van de beschikbare ruimte -->
+                        <ColumnDefinition Width="*"/>
+                        <!-- Tweede kolom, neemt de andere helft van de beschikbare ruimte -->
+                    </Grid.ColumnDefinitions>
+                    <GroupBox Grid.Column="0"
+                              Name="grpbxBrightness" Header="Stel de lichtsterkte in" Margin="5" BorderBrush="White" FontFamily="Montserrat" 
+                              FontWeight="Bold" Foreground="White" FontSize="25" BorderThickness="1">
+                        <Slider 
+                                x:Name="sldrBrightness" HorizontalAlignment="Stretch" Margin="5" VerticalAlignment="Center" Value="255"
+                                Minimum="1" Maximum="255" ValueChanged="sldrBrightness_ValueChanged" TickFrequency="1" IsSnapToTickEnabled="True" IsEnabled="True">
+                        </Slider>
+                    </GroupBox>
 
-                <GroupBox 
-                Name="grpbxOnOff" Header="Schakel de led strip in of uit" Margin="5" Width="495" BorderBrush="White" FontFamily="Montserrat" 
-                FontWeight="Bold" Foreground="White" FontSize="25" BorderThickness="1">
-                    <Button Name="btnOnOff" Content="Uitgeschakeld" Click="btnOnOff_Click" Margin="5">
+                    <GroupBox Grid.Column="1"
+                              Name="grpbxOnOff" Header="Schakel de led strip in of uit" Margin="5" BorderBrush="White" FontFamily="Montserrat" 
+                              FontWeight="Bold" Foreground="White" FontSize="25" BorderThickness="1">
+                        <Button Name="btnOnOff" Background="Red" Content="Uitgeschakeld" HorizontalAlignment="Stretch" Click="btnOnOff_Click" Margin="5">
+                            <Button.Template>
+                                <ControlTemplate TargetType="Button">
+                                    <Border Name="borderAanUit" CornerRadius="5" Background="{TemplateBinding Background}" Opacity="0.8" BorderBrush="White" BorderThickness="1">
+                                        <ContentPresenter HorizontalAlignment="Left" Margin="5" VerticalAlignment="Center"/>
+                                    </Border>
+                                </ControlTemplate>
+                            </Button.Template>
+                            <Button.Foreground>
+                                <SolidColorBrush Color="White"></SolidColorBrush>
+                            </Button.Foreground>
+                        </Button>
+                    </GroupBox>
+                </Grid>
+            </DockPanel>
+
+
+            <GroupBox Name="grpbxModussen" Header="Kies de gewenste kleurenmodus" Margin="5" BorderBrush="White" FontFamily="Montserrat" 
+                    FontWeight="Bold" Foreground="White" FontSize="25" BorderThickness="1">
+
+                <StackPanel Orientation="Horizontal">
+
+                    <Button Name="btnWit" Background="Transparent" Width="200" Height="50" Content="Wit" HorizontalAlignment="Stretch" Click="btnSetWhiteColor_Click" Margin="5">
                         <Button.Template>
                             <ControlTemplate TargetType="Button">
-                                <Border CornerRadius="5" Background="Red" Opacity="0.8" BorderBrush="Black" BorderThickness="1">
+                                <Border Name="borderWit" CornerRadius="5" Background="{TemplateBinding Background}" Opacity="0.8" BorderBrush="White" BorderThickness="3">
                                     <ContentPresenter HorizontalAlignment="Left" Margin="5" VerticalAlignment="Center"/>
                                 </Border>
                             </ControlTemplate>
@@ -57,11 +87,26 @@
                             <SolidColorBrush Color="White"></SolidColorBrush>
                         </Button.Foreground>
                     </Button>
-                </GroupBox>
-            </StackPanel>
-        <Button Content="Set White Color" HorizontalAlignment="Left" Margin="10,70,0,0" VerticalAlignment="Top" Width="120" Click="btnSetWhiteColor_Click"/>
-        <Button Content="Rainbow Cycle" HorizontalAlignment="Left" Margin="10,100,0,0" VerticalAlignment="Top" Width="120" Click="btnRainbowCycle_Click"/>
+
+                    <Button Name="btnRegenboog" Background="Transparent" Width="200" Height="50" Content="Regenboog" 
+                            HorizontalAlignment="Stretch" Click="btnRainbowCycle_Click" Margin="5">
+                        <Button.Template>
+                            <ControlTemplate TargetType="Button">
+                                <Border Name="borderWit" CornerRadius="5" Background="{TemplateBinding Background}" Opacity="0.8" BorderBrush="White" BorderThickness="3">
+                                    <ContentPresenter HorizontalAlignment="Left" Margin="5" VerticalAlignment="Center"/>
+                                </Border>
+                            </ControlTemplate>
+                        </Button.Template>
+                        <Button.Foreground>
+                            <SolidColorBrush Color="White"></SolidColorBrush>
+                        </Button.Foreground>
+                    </Button>
+
+
+                </StackPanel>
+            </GroupBox>
         </StackPanel>
+
     </Grid>
 </Window>
 
