@@ -21,7 +21,7 @@ namespace Eindwerk_Milan_LED_strip
     public partial class MainWindow : Window
     {
         private SerialPort _serialPort;
-
+        bool ledStripActief = false;
         public MainWindow()
         {
             InitializeComponent();
@@ -72,9 +72,28 @@ namespace Eindwerk_Milan_LED_strip
         {
             try
             {
-                // Stuur de schuifregelaarwaarde naar Arduino wanneer deze verandert
-                int value = (int)sldrBrightness.Value;
-                SendCommand("B" + value.ToString());
+                if (ledStripActief == true)
+                {
+                    // Stuur de schuifregelaarwaarde naar Arduino wanneer deze verandert
+                    int value = (int)sldrBrightness.Value;
+
+                    if (value == 0)
+                    {
+                        SendCommand("B" + value.ToString());
+
+                    }
+
+                    if ((value > 0) && (value < 6)) // Ledstrip problemen omzeilen (minimum brightness instellen)
+                    {
+                        SendCommand("B5");
+                    }
+
+                    else
+                    {
+                        SendCommand("B" + value.ToString());
+                    }
+                }
+
             }
             catch (Exception ex)
             {
@@ -82,11 +101,30 @@ namespace Eindwerk_Milan_LED_strip
             }
         }
 
+        private void btnLichtRood_Click(object sender, RoutedEventArgs e)
+        {
+            SendCommand("C");
+            KnoppenTransparant();
+            RoodAchtergrond();
+        }
+
+        private void RoodAchtergrond()
+        {
+            LinearGradientBrush gradientBrush = new LinearGradientBrush();
+            gradientBrush.StartPoint = new Point(0, 0);
+            gradientBrush.EndPoint = new Point(1, 1);
+
+            gradientBrush.GradientStops.Add(new GradientStop(Color.FromRgb(200, 0, 0), 0));
+            gradientBrush.GradientStops.Add(new GradientStop(Color.FromRgb(128, 0, 0), 1));
+
+            btnLichtRood.Background = gradientBrush;
+        }
+
         private void btnSetWhiteColor_Click(object sender, RoutedEventArgs e)
         {
             SendCommand("W");
             KnoppenTransparant();
-            WitAchtergrond();   
+            WitAchtergrond();
         }
 
         private void WitAchtergrond()
@@ -95,12 +133,8 @@ namespace Eindwerk_Milan_LED_strip
             gradientBrush.StartPoint = new Point(0, 0);
             gradientBrush.EndPoint = new Point(1, 1);
 
-            // Omgekeerde volgorde
             gradientBrush.GradientStops.Add(new GradientStop(Color.FromRgb(200, 200, 200), 0)); // Donkerder
             gradientBrush.GradientStops.Add(new GradientStop(Color.FromRgb(255, 255, 255), 1)); // Witter
-
-
-
 
             btnWit.Background = gradientBrush;
         }
@@ -110,7 +144,6 @@ namespace Eindwerk_Milan_LED_strip
             SendCommand("R");
             KnoppenTransparant();
             RegenboogAchtergrond();
-
         }
 
         private void RegenboogAchtergrond()
@@ -126,7 +159,7 @@ namespace Eindwerk_Milan_LED_strip
             gradientBrush.GradientStops.Add(new GradientStop(Colors.Blue, 0.67));
             gradientBrush.GradientStops.Add(new GradientStop(Colors.Indigo, 0.83));
             gradientBrush.GradientStops.Add(new GradientStop(Colors.Violet, 1));
-
+            gradientBrush.Opacity = 0.75;
             btnRegenboog.Background = gradientBrush;
         }
 
@@ -134,6 +167,8 @@ namespace Eindwerk_Milan_LED_strip
         {
             btnRegenboog.Background = new SolidColorBrush(Colors.Transparent);
             btnWit.Background = new SolidColorBrush(Colors.Transparent);
+            btnLichtRood.Background = new SolidColorBrush(Colors.Transparent);
+            btnLichtRood.Background = new SolidColorBrush(Colors.Transparent);
         }
 
         private void SendCommand(string command)
@@ -157,19 +192,30 @@ namespace Eindwerk_Milan_LED_strip
             {
                 if (_serialPort != null && _serialPort.IsOpen)
                 {
-                    // Stuur een byte om de Arduino te informeren dat de communicatie wordt beëindigd
-                    _serialPort.Write(new byte[] { 0 }, 0, 1);
-                    _serialPort.Close();
-                    _serialPort.Dispose();
+                    SendCommand("B0");
+                    SendCommand("U");
                 }
             }
             catch (Exception ex)
             {
                 MessageBox.Show("Fout bij het sluiten: " + ex.Message, "Fout", MessageBoxButton.OK, MessageBoxImage.Error);
             }
+            finally
+            {
+                try
+                {
+                    if (_serialPort != null && _serialPort.IsOpen)
+                    {
+                        _serialPort.Close();
+                        _serialPort.Dispose();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Fout bij het sluiten van de poort: " + ex.Message, "Fout", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
         }
-
-
 
         private void btnOnOff_Click(object sender, RoutedEventArgs e)
         {
@@ -177,11 +223,10 @@ namespace Eindwerk_Milan_LED_strip
             AanUitKnop();
         }
 
-
         private void AanUitKnop()
         {
             // Toggle de kleur van de knop
-            if (btnOnOff.Background is SolidColorBrush solidColorBrush && solidColorBrush.Color == Colors.Red)
+            if (ledStripActief == false)
             {
                 LinearGradientBrush gradientBrush = new LinearGradientBrush();
                 gradientBrush.StartPoint = new Point(0, 0);
@@ -193,17 +238,104 @@ namespace Eindwerk_Milan_LED_strip
                 btnOnOff.Background = gradientBrush;
                 btnOnOff.Content = "Ingeschakeld";
                 SendCommand("I"); // Ingeschakeld sturen
-
+                SendCommand("B" + sldrBrightness.Value.ToString());
+                ledStripActief = true;
             }
             else
             {
-                btnOnOff.Background = new SolidColorBrush(Colors.Red);
+                LinearGradientBrush gradientBrush = new LinearGradientBrush();
+                gradientBrush.StartPoint = new Point(0, 0);
+                gradientBrush.EndPoint = new Point(1, 1);
+
+                gradientBrush.GradientStops.Add(new GradientStop(Color.FromRgb(255, 0, 0), 0)); // Donkergroen
+                gradientBrush.GradientStops.Add(new GradientStop(Color.FromRgb(128, 0, 0), 1)); // Helder groen
+
+                btnOnOff.Background = gradientBrush;
                 btnOnOff.Content = "Uitgeschakeld";
                 SendCommand("U"); // Uitgeschakeld sturen
+                ledStripActief = false;
             }
+
+        }
+
+        private void btnDonkerRood_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void btnLichtOranje_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void btnLichtGeel_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void btnLichtGroen_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void btnLichtBlauw_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void btnLichtPaars_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void btnLichtRoze_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void btnLichtStatischeRegenboog_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void btnDonkerOranje_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void btnDonkerGeel_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void btnDonkerGroen_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void btnDonkerBlauw_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void btnDonkerPaars_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void btnDonkerRoze_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void btnGrijs_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void btnDonkerStatischeRegenboog_Click(object sender, RoutedEventArgs e)
+        {
 
         }
     }
 }
-
-
