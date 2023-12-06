@@ -45,15 +45,16 @@
                               Name="grpbxBrightness" Header="Stel de lichtsterkte in" Margin="5" BorderBrush="White" FontFamily="Montserrat" 
                               FontWeight="Bold" Foreground="White" FontSize="25" BorderThickness="1">
                         <Slider 
-                                x:Name="sldrBrightness" HorizontalAlignment="Stretch" Margin="5" VerticalAlignment="Center" Value="0"
-                                Minimum="0" Maximum="100" ValueChanged="sldrBrightness_ValueChanged" TickFrequency="1" IsSnapToTickEnabled="True" IsEnabled="True">
+                                x:Name="sldrBrightness" HorizontalAlignment="Stretch" Margin="5" VerticalAlignment="Center" Value="0" IsEnabled="False"
+                                Minimum="0" Maximum="100" ValueChanged="sldrBrightness_ValueChanged" TickFrequency="1" IsSnapToTickEnabled="True">
                         </Slider>
                     </GroupBox>
 
                     <GroupBox Grid.Column="1"
                               Name="grpbxOnOff" Header="Schakel de led strip in of uit" Margin="5" BorderBrush="White" FontFamily="Montserrat" 
                               FontWeight="Bold" Foreground="White" FontSize="25" BorderThickness="1">
-                        <Button Name="btnOnOff" Background="Red" Content="Uitgeschakeld" HorizontalAlignment="Stretch" Click="btnOnOff_Click" Margin="5">
+                        <Button Name="btnOnOff" Background="Red" Content="Uitgeschakeld" HorizontalAlignment="Stretch" Click="btnOnOff_Click" 
+                                Margin="5" IsEnabled="False">
                             <Button.Template>
                                 <ControlTemplate TargetType="Button">
                                     <Border Name="borderAanUit" CornerRadius="5" Background="{TemplateBinding Background}" Opacity="0.8" BorderBrush="White" BorderThickness="1">
@@ -178,7 +179,7 @@
                                 </Button.Foreground>
                             </Button>
 
-                            <Button Name="btnWit" Background="Transparent" Height="75" Content="Wit" HorizontalAlignment="Stretch" Click="btnSetWhiteColor_Click" Margin="5">
+                            <Button Name="btnWit" Background="Transparent" Height="75" Content="Wit" HorizontalAlignment="Stretch" Click="btnWit_Click" Margin="5">
                                 <Button.Template>
                                     <ControlTemplate TargetType="Button">
                                         <Border Name="borderWit" CornerRadius="5" Background="{TemplateBinding Background}" Opacity="0.8" BorderBrush="White" BorderThickness="3">

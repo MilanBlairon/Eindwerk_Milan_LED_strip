@@ -54,10 +54,11 @@ namespace Eindwerk_Milan_LED_strip
                     {
                         _serialPort.PortName = cbxComPorts.SelectedItem.ToString();
                         _serialPort.Open();
-                        sldrBrightness.IsEnabled = true;
+                        btnOnOff.IsEnabled = true;
                     }
                     else
                     {
+                        btnOnOff.IsEnabled = false;
                         sldrBrightness.IsEnabled = false;
                     }
                 }
@@ -74,6 +75,7 @@ namespace Eindwerk_Milan_LED_strip
             {
                 if (ledStripActief == true)
                 {
+                    sldrBrightness.IsEnabled = true;
                     // Stuur de schuifregelaarwaarde naar Arduino wanneer deze verandert
                     int value = (int)sldrBrightness.Value;
 
@@ -94,81 +96,16 @@ namespace Eindwerk_Milan_LED_strip
                     }
                 }
 
+                else
+                {
+                    sldrBrightness.IsEnabled = false;
+                }
+
             }
             catch (Exception ex)
             {
                 MessageBox.Show("Fout: " + ex.Message, "Fout", MessageBoxButton.OK, MessageBoxImage.Error);
             }
-        }
-
-        private void btnLichtRood_Click(object sender, RoutedEventArgs e)
-        {
-            SendCommand("C");
-            KnoppenTransparant();
-            RoodAchtergrond();
-        }
-
-        private void RoodAchtergrond()
-        {
-            LinearGradientBrush gradientBrush = new LinearGradientBrush();
-            gradientBrush.StartPoint = new Point(0, 0);
-            gradientBrush.EndPoint = new Point(1, 1);
-
-            gradientBrush.GradientStops.Add(new GradientStop(Color.FromRgb(200, 0, 0), 0));
-            gradientBrush.GradientStops.Add(new GradientStop(Color.FromRgb(128, 0, 0), 1));
-
-            btnLichtRood.Background = gradientBrush;
-        }
-
-        private void btnSetWhiteColor_Click(object sender, RoutedEventArgs e)
-        {
-            SendCommand("W");
-            KnoppenTransparant();
-            WitAchtergrond();
-        }
-
-        private void WitAchtergrond()
-        {
-            LinearGradientBrush gradientBrush = new LinearGradientBrush();
-            gradientBrush.StartPoint = new Point(0, 0);
-            gradientBrush.EndPoint = new Point(1, 1);
-
-            gradientBrush.GradientStops.Add(new GradientStop(Color.FromRgb(200, 200, 200), 0)); // Donkerder
-            gradientBrush.GradientStops.Add(new GradientStop(Color.FromRgb(255, 255, 255), 1)); // Witter
-
-            btnWit.Background = gradientBrush;
-        }
-
-        private void btnRainbowCycle_Click(object sender, RoutedEventArgs e)
-        {
-            SendCommand("R");
-            KnoppenTransparant();
-            RegenboogAchtergrond();
-        }
-
-        private void RegenboogAchtergrond()
-        {
-            LinearGradientBrush gradientBrush = new LinearGradientBrush();
-            gradientBrush.StartPoint = new Point(0, 0);
-            gradientBrush.EndPoint = new Point(1, 1);
-
-            gradientBrush.GradientStops.Add(new GradientStop(Colors.Red, 0));
-            gradientBrush.GradientStops.Add(new GradientStop(Colors.Orange, 0.17));
-            gradientBrush.GradientStops.Add(new GradientStop(Colors.Yellow, 0.33));
-            gradientBrush.GradientStops.Add(new GradientStop(Colors.Green, 0.5));
-            gradientBrush.GradientStops.Add(new GradientStop(Colors.Blue, 0.67));
-            gradientBrush.GradientStops.Add(new GradientStop(Colors.Indigo, 0.83));
-            gradientBrush.GradientStops.Add(new GradientStop(Colors.Violet, 1));
-            gradientBrush.Opacity = 0.75;
-            btnRegenboog.Background = gradientBrush;
-        }
-
-        private void KnoppenTransparant()
-        {
-            btnRegenboog.Background = new SolidColorBrush(Colors.Transparent);
-            btnWit.Background = new SolidColorBrush(Colors.Transparent);
-            btnLichtRood.Background = new SolidColorBrush(Colors.Transparent);
-            btnLichtRood.Background = new SolidColorBrush(Colors.Transparent);
         }
 
         private void SendCommand(string command)
@@ -182,7 +119,7 @@ namespace Eindwerk_Milan_LED_strip
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Fout: " + ex.Message, "Fout", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Fout bij het versturen van een commando: " + ex.Message, "Fout", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -217,12 +154,6 @@ namespace Eindwerk_Milan_LED_strip
             }
         }
 
-        private void btnOnOff_Click(object sender, RoutedEventArgs e)
-        {
-            // Toggle de kleur van de knop en de tekst
-            AanUitKnop();
-        }
-
         private void AanUitKnop()
         {
             // Toggle de kleur van de knop
@@ -239,6 +170,7 @@ namespace Eindwerk_Milan_LED_strip
                 btnOnOff.Content = "Ingeschakeld";
                 SendCommand("I"); // Ingeschakeld sturen
                 SendCommand("B" + sldrBrightness.Value.ToString());
+                sldrBrightness.IsEnabled = true;
                 ledStripActief = true;
             }
             else
@@ -253,89 +185,170 @@ namespace Eindwerk_Milan_LED_strip
                 btnOnOff.Background = gradientBrush;
                 btnOnOff.Content = "Uitgeschakeld";
                 SendCommand("U"); // Uitgeschakeld sturen
+                sldrBrightness.IsEnabled = false;
                 ledStripActief = false;
             }
 
         }
 
-        private void btnDonkerRood_Click(object sender, RoutedEventArgs e)
+        private void btnOnOff_Click(object sender, RoutedEventArgs e)
         {
-
+            AanUitKnop();
         }
+
+        private void btnLichtRood_Click(object sender, RoutedEventArgs e)
+            => AchtergrondKleurKnoppenVeranderen(sender, e, "D", btnLichtRood, Color.FromRgb(200, 0, 0), Color.FromRgb(128, 0, 0));
 
         private void btnLichtOranje_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
+            => AchtergrondKleurKnoppenVeranderen(sender, e, "E", btnLichtOranje, Color.FromRgb(255, 165, 0), Color.FromRgb(255, 140, 0));
 
         private void btnLichtGeel_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
+            => AchtergrondKleurKnoppenVeranderen(sender, e, "F", btnLichtGeel, Color.FromRgb(255, 255, 0), Color.FromRgb(255, 255, 0));
 
         private void btnLichtGroen_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
+            => AchtergrondKleurKnoppenVeranderen(sender, e, "G", btnLichtGroen, Color.FromRgb(0, 255, 0), Color.FromRgb(0, 255, 0));
 
         private void btnLichtBlauw_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
+            => AchtergrondKleurKnoppenVeranderen(sender, e, "H", btnLichtBlauw, Color.FromRgb(0, 0, 255), Color.FromRgb(0, 0, 255));
 
         private void btnLichtPaars_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
+            => AchtergrondKleurKnoppenVeranderen(sender, e, "I", btnLichtPaars, Color.FromRgb(128, 0, 128), Color.FromRgb(128, 0, 128));
 
         private void btnLichtRoze_Click(object sender, RoutedEventArgs e)
-        {
+            => AchtergrondKleurKnoppenVeranderen(sender, e, "J", btnLichtRoze, Color.FromRgb(255, 182, 193), Color.FromRgb(255, 192, 203));
 
-        }
+        private void btnWit_Click(object sender, RoutedEventArgs e)
+            => AchtergrondKleurKnoppenVeranderen(sender, e, "K", btnWit, Color.FromRgb(200, 200, 200), Color.FromRgb(255, 255, 255));
 
         private void btnLichtStatischeRegenboog_Click(object sender, RoutedEventArgs e)
         {
-
+            SendCommand("L");
+            KnoppenTransparant();
+            StatischeRegenboogAchtergrond();
         }
+
+        private void btnDonkerRood_Click(object sender, RoutedEventArgs e)
+            => AchtergrondKleurKnoppenVeranderen(sender, e, "M", btnDonkerRood, Color.FromRgb(200, 0, 0), Color.FromRgb(128, 0, 0));
 
         private void btnDonkerOranje_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
+            => AchtergrondKleurKnoppenVeranderen(sender, e, "N", btnDonkerOranje, Color.FromRgb(255, 165, 0), Color.FromRgb(255, 140, 0));
 
         private void btnDonkerGeel_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
+            => AchtergrondKleurKnoppenVeranderen(sender, e, "O", btnDonkerGeel, Color.FromRgb(255, 255, 0), Color.FromRgb(255, 255, 0));
 
         private void btnDonkerGroen_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
+            => AchtergrondKleurKnoppenVeranderen(sender, e, "P", btnDonkerGroen, Color.FromRgb(0, 255, 0), Color.FromRgb(0, 255, 0));
 
         private void btnDonkerBlauw_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
+            => AchtergrondKleurKnoppenVeranderen(sender, e, "Q", btnDonkerBlauw, Color.FromRgb(0, 0, 255), Color.FromRgb(0, 0, 255));
 
         private void btnDonkerPaars_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
+            => AchtergrondKleurKnoppenVeranderen(sender, e, "R", btnDonkerPaars, Color.FromRgb(128, 0, 128), Color.FromRgb(128, 0, 128));
 
         private void btnDonkerRoze_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
+            => AchtergrondKleurKnoppenVeranderen(sender, e, "S", btnDonkerRoze, Color.FromRgb(255, 182, 193), Color.FromRgb(255, 192, 203));
 
         private void btnGrijs_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
+            => AchtergrondKleurKnoppenVeranderen(sender, e, "T", btnGrijs, Color.FromRgb(200, 200, 200), Color.FromRgb(255, 255, 255));
 
         private void btnDonkerStatischeRegenboog_Click(object sender, RoutedEventArgs e)
         {
+            SendCommand("U");
+            KnoppenTransparant();
+            DonkerStatischeRegenboogAchtergrond();
+        }
+
+        private void btnRainbowCycle_Click(object sender, RoutedEventArgs e)
+        {
+            SendCommand("V");
+            KnoppenTransparant();
+            RegenboogAchtergrond();
+        }
+
+        private void RegenboogAchtergrond()
+        {
+            LinearGradientBrush gradientBrush = new LinearGradientBrush();
+            gradientBrush.StartPoint = new Point(0, 0);
+            gradientBrush.EndPoint = new Point(1, 1);
+
+            gradientBrush.GradientStops.Add(new GradientStop(Colors.Red, 0));
+            gradientBrush.GradientStops.Add(new GradientStop(Colors.Orange, 0.17));
+            gradientBrush.GradientStops.Add(new GradientStop(Colors.Yellow, 0.33));
+            gradientBrush.GradientStops.Add(new GradientStop(Colors.Green, 0.5));
+            gradientBrush.GradientStops.Add(new GradientStop(Colors.Blue, 0.67));
+            gradientBrush.GradientStops.Add(new GradientStop(Colors.Indigo, 0.83));
+            gradientBrush.GradientStops.Add(new GradientStop(Colors.Violet, 1));
+            gradientBrush.Opacity = 0.75;
+            btnRegenboog.Background = gradientBrush;
+        }
+
+        private void StatischeRegenboogAchtergrond()
+        {
+            LinearGradientBrush gradientBrush = new LinearGradientBrush();
+            gradientBrush.StartPoint = new Point(0, 0);
+            gradientBrush.EndPoint = new Point(1, 1);
+
+            gradientBrush.GradientStops.Add(new GradientStop(Colors.Red, 0));
+            gradientBrush.GradientStops.Add(new GradientStop(Colors.Orange, 0.17));
+            gradientBrush.GradientStops.Add(new GradientStop(Colors.Yellow, 0.33));
+            gradientBrush.GradientStops.Add(new GradientStop(Colors.Green, 0.5));
+            gradientBrush.GradientStops.Add(new GradientStop(Colors.Blue, 0.67));
+            gradientBrush.GradientStops.Add(new GradientStop(Colors.Indigo, 0.83));
+            gradientBrush.GradientStops.Add(new GradientStop(Colors.Violet, 1));
+            gradientBrush.Opacity = 0.75;
+
+            btnLichtStatischeRegenboog.Background = gradientBrush;
+        }
+        private void DonkerStatischeRegenboogAchtergrond()
+        {
+            LinearGradientBrush gradientBrush = new LinearGradientBrush();
+            gradientBrush.StartPoint = new Point(0, 0);
+            gradientBrush.EndPoint = new Point(1, 1);
+
+            gradientBrush.GradientStops.Add(new GradientStop(Colors.Red, 0));
+            gradientBrush.GradientStops.Add(new GradientStop(Colors.Orange, 0.17));
+            gradientBrush.GradientStops.Add(new GradientStop(Colors.Yellow, 0.33));
+            gradientBrush.GradientStops.Add(new GradientStop(Colors.Green, 0.5));
+            gradientBrush.GradientStops.Add(new GradientStop(Colors.Blue, 0.67));
+            gradientBrush.GradientStops.Add(new GradientStop(Colors.Indigo, 0.83));
+            gradientBrush.GradientStops.Add(new GradientStop(Colors.Violet, 1));
+            gradientBrush.Opacity = 0.75;
+
+            btnDonkerStatischeRegenboog.Background = gradientBrush;
+        }
+
+        private void KnoppenTransparant()
+        {
+
+            List<Button> knoppen = new List<Button>
+            {
+                btnLichtRood, btnLichtOranje, btnLichtGeel, btnLichtGroen,
+                btnLichtBlauw, btnLichtPaars, btnLichtRoze, btnLichtStatischeRegenboog,
+                btnWit, btnDonkerRood, btnDonkerOranje, btnDonkerGeel, btnDonkerGroen,
+                btnDonkerBlauw, btnDonkerPaars, btnDonkerRoze, btnGrijs,
+                btnDonkerStatischeRegenboog, btnRegenboog
+            };
+
+            foreach (var knop in knoppen)
+            {
+                knop.Background = new SolidColorBrush(Colors.Transparent);
+            }
 
         }
+        private void AchtergrondKleurKnoppenVeranderen(object sender, RoutedEventArgs e, string command, Button button, Color startColor, Color endColor)
+        {
+            SendCommand(command);
+            KnoppenTransparant();
+
+            LinearGradientBrush gradientBrush = new LinearGradientBrush();
+            gradientBrush.StartPoint = new Point(0, 0);
+            gradientBrush.EndPoint = new Point(1, 1);
+
+            gradientBrush.GradientStops.Add(new GradientStop(startColor, 0));
+            gradientBrush.GradientStops.Add(new GradientStop(endColor, 1));
+
+            ((Button)sender).Background = gradientBrush;
+        }
+
     }
 }
