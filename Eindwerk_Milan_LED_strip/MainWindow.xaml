@@ -6,379 +6,523 @@
         xmlns:local="clr-namespace:Eindwerk_Milan_LED_strip"
         mc:Ignorable="d"
         Title="Eindwerk LED strip - Milan Blairon" Height="1080" Width="1920" WindowState="Maximized"
-        Closing="Window_Closing">
+        Closing="Window_Closing" MinWidth="1100" MinHeight="320">
 
-    <Grid>
-        <Image Source="/abstract-color-graphic-geometric-elements-abstract-backgrounds-free-vector.jpg" Stretch="UniformToFill" Opacity="0.80">
-            <Image.Effect>
-                <BlurEffect Radius="15"/>
-                <!-- De waarde van Radius bepaalt de mate van vervaging -->
-            </Image.Effect>
-        </Image>
+    <ScrollViewer VerticalScrollBarVisibility="Hidden">
 
-        <StackPanel>
-            <Border BorderBrush="White" BorderThickness="2" Margin="5" CornerRadius="5">
-                <Label 
+        <Grid>
+            <Image Source="/abstract-color-graphic-geometric-elements-abstract-backgrounds-free-vector.jpg" Stretch="UniformToFill" Opacity="0.8">
+                <Image.Effect>
+                    <BlurEffect Radius="50"/>
+                    <!-- De waarde van Radius bepaalt de mate van vervaging -->
+                </Image.Effect>
+            </Image>
+
+            <StackPanel>
+                <Border BorderBrush="White" BorderThickness="2" Margin="5" CornerRadius="5">
+                    <Label 
                 Content="Ledstripproject Milan Blairon" FontSize="50" FontFamily="Montserrat" FontWeight="Bold" 
                 Foreground="White" Margin="5">
-                </Label>
-            </Border>
+                    </Label>
+                </Border>
 
-            <GroupBox 
+                <GroupBox 
                 Name="grpbxCOMPoort" Header="Selecteer COM poort" Margin="5" BorderBrush="White" FontFamily="Montserrat" 
                 FontWeight="Bold" Foreground="White" FontSize="25" BorderThickness="1">
-                <ComboBox 
-                    x:Name="cbxComPorts" Width="1900" Height="Auto" HorizontalAlignment="Left" VerticalAlignment="Center" BorderBrush="White"
+                    <ComboBox 
+                    x:Name="cbxComPorts" Width="{Binding ElementName=grpbxCOMPoort, Path=ActualWidth}" Height="Auto" HorizontalAlignment="Left" VerticalAlignment="Center" BorderBrush="White"
                     BorderThickness="1" Background="White" SelectionChanged="cbxComPorts_SelectionChanged" Foreground="Black">
-                </ComboBox>
-            </GroupBox>
+                    </ComboBox>
+                </GroupBox>
 
-            <DockPanel>
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <!-- Eerste kolom, neemt de helft van de beschikbare ruimte -->
-                        <ColumnDefinition Width="*"/>
-                        <!-- Tweede kolom, neemt de andere helft van de beschikbare ruimte -->
-                    </Grid.ColumnDefinitions>
-                    <GroupBox Grid.Column="0"
+                <StackPanel Orientation="Vertical">
+                    <UniformGrid Columns="3" HorizontalAlignment="Stretch">
+
+                        <GroupBox 
                               Name="grpbxBrightness" Header="Stel de lichtsterkte in" Margin="5" BorderBrush="White" FontFamily="Montserrat" 
                               FontWeight="Bold" Foreground="White" FontSize="25" BorderThickness="1">
-                        <Slider 
+                            <Slider 
                                 x:Name="sldrBrightness" HorizontalAlignment="Stretch" Margin="5" VerticalAlignment="Center" Value="0" IsEnabled="False"
                                 Minimum="0" Maximum="100" ValueChanged="sldrBrightness_ValueChanged" TickFrequency="1" IsSnapToTickEnabled="True">
-                        </Slider>
-                    </GroupBox>
+                                <Slider.Resources>
+                                    <Style TargetType="Thumb">
+                                        <Setter Property="Height" Value="20" />
+                                        <!-- Pas de hoogte aan zoals gewenst -->
+                                        <Setter Property="Width" Value="30" />
+                                        <!-- Pas de breedte aan zoals gewenst -->
+                                    </Style>
+                                </Slider.Resources>
+                            </Slider>
+                        </GroupBox>
 
-                    <GroupBox Grid.Column="1"
+                        <GroupBox
                               Name="grpbxOnOff" Header="Schakel de led strip in of uit" Margin="5" BorderBrush="White" FontFamily="Montserrat" 
                               FontWeight="Bold" Foreground="White" FontSize="25" BorderThickness="1">
-                        <Button Name="btnOnOff" Background="Red" Content="Uitgeschakeld" HorizontalAlignment="Stretch" Click="btnOnOff_Click" 
+                            <Button Name="btnOnOff" Background="Red" Content="Uitgeschakeld" HorizontalAlignment="Stretch" Click="btnOnOff_Click" 
                                 Margin="5" IsEnabled="False">
-                            <Button.Template>
-                                <ControlTemplate TargetType="Button">
-                                    <Border Name="borderAanUit" CornerRadius="5" Background="{TemplateBinding Background}" Opacity="0.8" BorderBrush="White" BorderThickness="1">
-                                        <ContentPresenter HorizontalAlignment="Left" Margin="5" VerticalAlignment="Center"/>
-                                    </Border>
-                                </ControlTemplate>
-                            </Button.Template>
-                            <Button.Foreground>
-                                <SolidColorBrush Color="White"></SolidColorBrush>
-                            </Button.Foreground>
-                        </Button>
-                    </GroupBox>
-                </Grid>
-            </DockPanel>
+                                <Button.Template>
+                                    <ControlTemplate TargetType="Button">
+                                        <Border Name="borderAanUit" CornerRadius="5" Background="{TemplateBinding Background}" Opacity="0.8" BorderBrush="White" BorderThickness="1">
+                                            <ContentPresenter HorizontalAlignment="Left" Margin="5" VerticalAlignment="Center"/>
+                                        </Border>
+                                    </ControlTemplate>
+                                </Button.Template>
+                                <Button.Foreground>
+                                    <SolidColorBrush Color="White"></SolidColorBrush>
+                                </Button.Foreground>
+                            </Button>
+                        </GroupBox>
+
+                        <GroupBox
+                              Name="grpbxSnelleStart" Header="Schakel de ledstrip snel in" Margin="5" BorderBrush="White" FontFamily="Montserrat" 
+                              FontWeight="Bold" Foreground="White" FontSize="25" BorderThickness="1" HorizontalAlignment="Stretch">
+                            <Button Name="btnSnelleStart" Background="DodgerBlue" Content="Snelle start (Wit, 50%)" HorizontalAlignment="Stretch" Click="btnSnelleStart_Click" 
+                                    Margin="5" IsEnabled="True">
+                                <Button.Template>
+                                    <ControlTemplate TargetType="Button">
+                                        <Border Name="borderAanUit" CornerRadius="5" Background="{TemplateBinding Background}" Opacity="0.8" BorderBrush="White" BorderThickness="1">
+                                            <ContentPresenter HorizontalAlignment="Left" Margin="5" VerticalAlignment="Center"/>
+                                        </Border>
+                                    </ControlTemplate>
+                                </Button.Template>
+                                <Button.Foreground>
+                                    <SolidColorBrush Color="White"></SolidColorBrush>
+                                </Button.Foreground>
+                            </Button>
+                        </GroupBox>
+                    </UniformGrid>
+                </StackPanel>
 
 
-            <GroupBox Name="grpbxModussen" Header="Kies de gewenste kleurenmodus" Margin="5" BorderBrush="White" FontFamily="Montserrat" 
+                <GroupBox Name="grpbxModussen" Header="Kies de gewenste kleurenmodus" Margin="5 " BorderBrush="White" FontFamily="Montserrat" 
                     FontWeight="Bold" Foreground="White" FontSize="25" BorderThickness="1">
 
-                <UniformGrid Rows="3" HorizontalAlignment="Stretch">
+                    <UniformGrid Rows="3" HorizontalAlignment="Stretch">
 
-                    <GroupBox Name="grpbxLichteKleuren" Header="Lichte kleuren" Margin="5,30,5,5" BorderBrush="White" FontFamily="Montserrat" 
-                    FontWeight="Bold" Foreground="White" FontSize="25" BorderThickness="1">
+                        <GroupBox Name="grpbxKleuren" Header="Statische Kleuren" Margin="5,30,5,5" BorderBrush="White" FontFamily="Montserrat" 
+                                  FontWeight="Bold" Foreground="White" FontSize="25" BorderThickness="1">
 
-                        <UniformGrid Columns="9" HorizontalAlignment="Stretch">
+                            <UniformGrid Columns="9" HorizontalAlignment="Stretch">
 
-                            <Button Name="btnLichtRood" Background="Transparent" Height="75" Content="Rood" 
-                            HorizontalAlignment="Stretch" Click="btnLichtRood_Click" Margin="5,30,5,30">
-                                <Button.Template>
-                                    <ControlTemplate TargetType="Button">
-                                        <Border Name="borderRood" CornerRadius="5" Background="{TemplateBinding Background}" Opacity="0.8" BorderBrush="White" BorderThickness="3">
-                                            <ContentPresenter HorizontalAlignment="Left" Margin="5" VerticalAlignment="Center"/>
-                                        </Border>
-                                    </ControlTemplate>
-                                </Button.Template>
-                                <Button.Foreground>
-                                    <SolidColorBrush Color="White"></SolidColorBrush>
-                                </Button.Foreground>
-                            </Button>
+                                <Button Name="btnLichtRood" Background="Transparent" Height="75" Content="Rood" 
+                                        HorizontalAlignment="Stretch" Click="btnLichtRood_Click" Margin="5,30,5,30">
+                                    <Button.Template>
+                                        <ControlTemplate TargetType="Button">
+                                            <Border Name="borderRood" CornerRadius="5" Background="{TemplateBinding Background}" Opacity="0.8" BorderBrush="White" BorderThickness="3">
+                                                <ContentPresenter HorizontalAlignment="Left" Margin="5" VerticalAlignment="Center"/>
+                                            </Border>
+                                        </ControlTemplate>
+                                    </Button.Template>
+                                    <Button.Foreground>
+                                        <SolidColorBrush Color="White"></SolidColorBrush>
+                                    </Button.Foreground>
+                                </Button>
 
-                            <Button Name="btnLichtOranje" Background="Transparent" Height="75" Content="Oranje" 
-                                    HorizontalAlignment="Stretch" Click="btnLichtOranje_Click" Margin="5">
-                                <Button.Template>
-                                    <ControlTemplate TargetType="Button">
-                                        <Border Name="borderRood" CornerRadius="5" Background="{TemplateBinding Background}" Opacity="0.8" BorderBrush="White" BorderThickness="3">
-                                            <ContentPresenter HorizontalAlignment="Left" Margin="5" VerticalAlignment="Center"/>
-                                        </Border>
-                                    </ControlTemplate>
-                                </Button.Template>
-                                <Button.Foreground>
-                                    <SolidColorBrush Color="White"></SolidColorBrush>
-                                </Button.Foreground>
-                            </Button>
+                                <Button Name="btnLichtOranje" Background="Transparent" Height="75" Content="Oranje" 
+                                        HorizontalAlignment="Stretch" Click="btnLichtOranje_Click" Margin="5">
+                                    <Button.Template>
+                                        <ControlTemplate TargetType="Button">
+                                            <Border Name="borderRood" CornerRadius="5" Background="{TemplateBinding Background}" Opacity="0.8" BorderBrush="White" BorderThickness="3">
+                                                <ContentPresenter HorizontalAlignment="Left" Margin="5" VerticalAlignment="Center"/>
+                                            </Border>
+                                        </ControlTemplate>
+                                    </Button.Template>
+                                    <Button.Foreground>
+                                        <SolidColorBrush Color="White"></SolidColorBrush>
+                                    </Button.Foreground>
+                                </Button>
 
-                            <Button Name="btnLichtGeel" Background="Transparent" Height="75" Content="Geel" 
-                                    HorizontalAlignment="Stretch" Click="btnLichtGeel_Click" Margin="5">
-                                <Button.Template>
-                                    <ControlTemplate TargetType="Button">
-                                        <Border Name="borderRood" CornerRadius="5" Background="{TemplateBinding Background}" Opacity="0.8" BorderBrush="White" BorderThickness="3">
-                                            <ContentPresenter HorizontalAlignment="Left" Margin="5" VerticalAlignment="Center"/>
-                                        </Border>
-                                    </ControlTemplate>
-                                </Button.Template>
-                                <Button.Foreground>
-                                    <SolidColorBrush Color="White"></SolidColorBrush>
-                                </Button.Foreground>
-                            </Button>
+                                <Button Name="btnLichtGeel" Background="Transparent" Height="75" Content="Geel" 
+                                        HorizontalAlignment="Stretch" Click="btnLichtGeel_Click" Margin="5">
+                                    <Button.Template>
+                                        <ControlTemplate TargetType="Button">
+                                            <Border Name="borderRood" CornerRadius="5" Background="{TemplateBinding Background}" Opacity="0.8" BorderBrush="White" BorderThickness="3">
+                                                <ContentPresenter HorizontalAlignment="Left" Margin="5" VerticalAlignment="Center"/>
+                                            </Border>
+                                        </ControlTemplate>
+                                    </Button.Template>
+                                    <Button.Foreground>
+                                        <SolidColorBrush Color="White"></SolidColorBrush>
+                                    </Button.Foreground>
+                                </Button>
 
-                            <Button Name="btnLichtGroen" Background="Transparent" Height="75" Content="Groen" 
-                                    HorizontalAlignment="Stretch" Click="btnLichtGroen_Click" Margin="5">
-                                <Button.Template>
-                                    <ControlTemplate TargetType="Button">
-                                        <Border Name="borderRood" CornerRadius="5" Background="{TemplateBinding Background}" Opacity="0.8" BorderBrush="White" BorderThickness="3">
-                                            <ContentPresenter HorizontalAlignment="Left" Margin="5" VerticalAlignment="Center"/>
-                                        </Border>
-                                    </ControlTemplate>
-                                </Button.Template>
-                                <Button.Foreground>
-                                    <SolidColorBrush Color="White"></SolidColorBrush>
-                                </Button.Foreground>
-                            </Button>
+                                <Button Name="btnLichtGroen" Background="Transparent" Height="75" Content="Groen" 
+                                        HorizontalAlignment="Stretch" Click="btnLichtGroen_Click" Margin="5">
+                                    <Button.Template>
+                                        <ControlTemplate TargetType="Button">
+                                            <Border Name="borderRood" CornerRadius="5" Background="{TemplateBinding Background}" Opacity="0.8" BorderBrush="White" BorderThickness="3">
+                                                <ContentPresenter HorizontalAlignment="Left" Margin="5" VerticalAlignment="Center"/>
+                                            </Border>
+                                        </ControlTemplate>
+                                    </Button.Template>
+                                    <Button.Foreground>
+                                        <SolidColorBrush Color="White"></SolidColorBrush>
+                                    </Button.Foreground>
+                                </Button>
 
-                            <Button Name="btnLichtBlauw" Background="Transparent" Height="75" Content="Blauw" 
-                                    HorizontalAlignment="Stretch" Click="btnLichtBlauw_Click" Margin="5">
-                                <Button.Template>
-                                    <ControlTemplate TargetType="Button">
-                                        <Border Name="borderRood" CornerRadius="5" Background="{TemplateBinding Background}" Opacity="0.8" BorderBrush="White" BorderThickness="3">
-                                            <ContentPresenter HorizontalAlignment="Left" Margin="5" VerticalAlignment="Center"/>
-                                        </Border>
-                                    </ControlTemplate>
-                                </Button.Template>
-                                <Button.Foreground>
-                                    <SolidColorBrush Color="White"></SolidColorBrush>
-                                </Button.Foreground>
-                            </Button>
+                                <Button Name="btnLichtBlauw" Background="Transparent" Height="75" Content="Blauw" 
+                                        HorizontalAlignment="Stretch" Click="btnLichtBlauw_Click" Margin="5">
+                                    <Button.Template>
+                                        <ControlTemplate TargetType="Button">
+                                            <Border Name="borderRood" CornerRadius="5" Background="{TemplateBinding Background}" Opacity="0.8" BorderBrush="White" BorderThickness="3">
+                                                <ContentPresenter HorizontalAlignment="Left" Margin="5" VerticalAlignment="Center"/>
+                                            </Border>
+                                        </ControlTemplate>
+                                    </Button.Template>
+                                    <Button.Foreground>
+                                        <SolidColorBrush Color="White"></SolidColorBrush>
+                                    </Button.Foreground>
+                                </Button>
 
-                            <Button Name="btnLichtPaars" Background="Transparent" Height="75" Content="Paars" 
-                                    HorizontalAlignment="Stretch" Click="btnLichtPaars_Click" Margin="5">
-                                <Button.Template>
-                                    <ControlTemplate TargetType="Button">
-                                        <Border Name="borderRood" CornerRadius="5" Background="{TemplateBinding Background}" Opacity="0.8" BorderBrush="White" BorderThickness="3">
-                                            <ContentPresenter HorizontalAlignment="Left" Margin="5" VerticalAlignment="Center"/>
-                                        </Border>
-                                    </ControlTemplate>
-                                </Button.Template>
-                                <Button.Foreground>
-                                    <SolidColorBrush Color="White"></SolidColorBrush>
-                                </Button.Foreground>
-                            </Button>
+                                <Button Name="btnLichtPaars" Background="Transparent" Height="75" Content="Paars" 
+                                        HorizontalAlignment="Stretch" Click="btnLichtPaars_Click" Margin="5">
+                                    <Button.Template>
+                                        <ControlTemplate TargetType="Button">
+                                            <Border Name="borderRood" CornerRadius="5" Background="{TemplateBinding Background}" Opacity="0.8" BorderBrush="White" BorderThickness="3">
+                                                <ContentPresenter HorizontalAlignment="Left" Margin="5" VerticalAlignment="Center"/>
+                                            </Border>
+                                        </ControlTemplate>
+                                    </Button.Template>
+                                    <Button.Foreground>
+                                        <SolidColorBrush Color="White"></SolidColorBrush>
+                                    </Button.Foreground>
+                                </Button>
 
-                            <Button Name="btnLichtRoze" Background="Transparent" Height="75" Content="Roze" 
-                                    HorizontalAlignment="Stretch" Click="btnLichtRoze_Click" Margin="5">
-                                <Button.Template>
-                                    <ControlTemplate TargetType="Button">
-                                        <Border Name="borderRood" CornerRadius="5" Background="{TemplateBinding Background}" Opacity="0.8" BorderBrush="White" BorderThickness="3">
-                                            <ContentPresenter HorizontalAlignment="Left" Margin="5" VerticalAlignment="Center"/>
-                                        </Border>
-                                    </ControlTemplate>
-                                </Button.Template>
-                                <Button.Foreground>
-                                    <SolidColorBrush Color="White"></SolidColorBrush>
-                                </Button.Foreground>
-                            </Button>
+                                <Button Name="btnLichtRoze" Background="Transparent" Height="75" Content="Roze" 
+                                        HorizontalAlignment="Stretch" Click="btnLichtRoze_Click" Margin="5">
+                                    <Button.Template>
+                                        <ControlTemplate TargetType="Button">
+                                            <Border Name="borderRood" CornerRadius="5" Background="{TemplateBinding Background}" Opacity="0.8" BorderBrush="White" BorderThickness="3">
+                                                <ContentPresenter HorizontalAlignment="Left" Margin="5" VerticalAlignment="Center"/>
+                                            </Border>
+                                        </ControlTemplate>
+                                    </Button.Template>
+                                    <Button.Foreground>
+                                        <SolidColorBrush Color="White"></SolidColorBrush>
+                                    </Button.Foreground>
+                                </Button>
 
-                            <Button Name="btnWit" Background="Transparent" Height="75" Content="Wit" HorizontalAlignment="Stretch" Click="btnWit_Click" Margin="5">
-                                <Button.Template>
-                                    <ControlTemplate TargetType="Button">
-                                        <Border Name="borderWit" CornerRadius="5" Background="{TemplateBinding Background}" Opacity="0.8" BorderBrush="White" BorderThickness="3">
-                                            <ContentPresenter HorizontalAlignment="Left" Margin="5" VerticalAlignment="Center"/>
-                                        </Border>
-                                    </ControlTemplate>
-                                </Button.Template>
-                                <Button.Foreground>
-                                    <SolidColorBrush Color="White"></SolidColorBrush>
-                                </Button.Foreground>
-                            </Button>
+                                <Button Name="btnWit" Background="Transparent" Height="75" Content="Wit" HorizontalAlignment="Stretch" Click="btnWit_Click" Margin="5">
+                                    <Button.Template>
+                                        <ControlTemplate TargetType="Button">
+                                            <Border Name="borderWit" CornerRadius="5" Background="{TemplateBinding Background}" Opacity="0.8" BorderBrush="White" BorderThickness="3">
+                                                <ContentPresenter HorizontalAlignment="Left" Margin="5" VerticalAlignment="Center"/>
+                                            </Border>
+                                        </ControlTemplate>
+                                    </Button.Template>
+                                    <Button.Foreground>
+                                        <SolidColorBrush Color="White"></SolidColorBrush>
+                                    </Button.Foreground>
+                                </Button>
 
-                            <Button Name="btnLichtStatischeRegenboog" Background="Transparent" Height="75" Content="Regenboog" 
-                                    HorizontalAlignment="Stretch" Click="btnLichtStatischeRegenboog_Click" Margin="5">
-                                <Button.Template>
-                                    <ControlTemplate TargetType="Button">
-                                        <Border Name="borderRood" CornerRadius="5" Background="{TemplateBinding Background}" Opacity="0.8" BorderBrush="White" BorderThickness="3">
-                                            <ContentPresenter HorizontalAlignment="Left" Margin="5" VerticalAlignment="Center"/>
-                                        </Border>
-                                    </ControlTemplate>
-                                </Button.Template>
-                                <Button.Foreground>
-                                    <SolidColorBrush Color="White"></SolidColorBrush>
-                                </Button.Foreground>
-                            </Button>
+                                <Button Name="btnWarmWit" Background="Transparent" Height="75" Content="Warm Wit" 
+                                    HorizontalAlignment="Stretch" Click="btnWarmWit_Click" Margin="5">
+                                    <Button.Template>
+                                        <ControlTemplate TargetType="Button">
+                                            <Border Name="borderRood" CornerRadius="5" Background="{TemplateBinding Background}" Opacity="0.8" BorderBrush="White" BorderThickness="3">
+                                                <ContentPresenter HorizontalAlignment="Left" Margin="5" VerticalAlignment="Center"/>
+                                            </Border>
+                                        </ControlTemplate>
+                                    </Button.Template>
+                                    <Button.Foreground>
+                                        <SolidColorBrush Color="White"></SolidColorBrush>
+                                    </Button.Foreground>
+                                </Button>
 
-                        </UniformGrid>
+                            </UniformGrid>
 
-                    </GroupBox>
-
-
+                        </GroupBox>
 
 
 
 
-                    <GroupBox Name="grpbxDonkereKleuren" Header="Donkere kleuren" Margin="5,30,5,5" BorderBrush="White" FontFamily="Montserrat" 
+
+                        <GroupBox Name="grpbxStatischeGradients" Header="Statische Kleurenovergangen" Margin="5,30,5,5" BorderBrush="White" FontFamily="Montserrat" 
                               FontWeight="Bold" Foreground="White" FontSize="25" BorderThickness="1">
 
-                        <UniformGrid Columns="9" HorizontalAlignment="Stretch">
+                            <UniformGrid Columns="9" HorizontalAlignment="Stretch">
 
-                                    <Button Name="btnDonkerRood" Background="Transparent" Height="75" Content="Rood" 
+                                <Button Name="btnDonkerRood" Background="Transparent" Height="75" Content="Rood" 
                                             HorizontalAlignment="Stretch" Click="btnDonkerRood_Click" Margin="5,30,5,30">
-                                        <Button.Template>
-                                            <ControlTemplate TargetType="Button">
-                                                <Border Name="borderRood" CornerRadius="5" Background="{TemplateBinding Background}" Opacity="0.8" BorderBrush="White" BorderThickness="3">
-                                                    <ContentPresenter HorizontalAlignment="Left" Margin="5" VerticalAlignment="Center"/>
-                                                </Border>
-                                            </ControlTemplate>
-                                        </Button.Template>
-                                        <Button.Foreground>
-                                            <SolidColorBrush Color="White"></SolidColorBrush>
-                                        </Button.Foreground>
-                                    </Button>
+                                    <Button.Template>
+                                        <ControlTemplate TargetType="Button">
+                                            <Border Name="borderRood" CornerRadius="5" Background="{TemplateBinding Background}" Opacity="0.8" BorderBrush="White" BorderThickness="3">
+                                                <ContentPresenter HorizontalAlignment="Left" Margin="5" VerticalAlignment="Center"/>
+                                            </Border>
+                                        </ControlTemplate>
+                                    </Button.Template>
+                                    <Button.Foreground>
+                                        <SolidColorBrush Color="White"></SolidColorBrush>
+                                    </Button.Foreground>
+                                </Button>
 
-                                    <Button Name="btnDonkerOranje" Background="Transparent" Height="75" Content="Oranje" 
+                                <Button Name="btnDonkerOranje" Background="Transparent" Height="75" Content="Oranje" 
                                             HorizontalAlignment="Stretch" Click="btnDonkerOranje_Click" Margin="5">
-                                        <Button.Template>
-                                            <ControlTemplate TargetType="Button">
-                                                <Border Name="borderRood" CornerRadius="5" Background="{TemplateBinding Background}" Opacity="0.8" BorderBrush="White" BorderThickness="3">
-                                                    <ContentPresenter HorizontalAlignment="Left" Margin="5" VerticalAlignment="Center"/>
-                                                </Border>
-                                            </ControlTemplate>
-                                        </Button.Template>
-                                        <Button.Foreground>
-                                            <SolidColorBrush Color="White"></SolidColorBrush>
-                                        </Button.Foreground>
-                                    </Button>
+                                    <Button.Template>
+                                        <ControlTemplate TargetType="Button">
+                                            <Border Name="borderRood" CornerRadius="5" Background="{TemplateBinding Background}" Opacity="0.8" BorderBrush="White" BorderThickness="3">
+                                                <ContentPresenter HorizontalAlignment="Left" Margin="5" VerticalAlignment="Center"/>
+                                            </Border>
+                                        </ControlTemplate>
+                                    </Button.Template>
+                                    <Button.Foreground>
+                                        <SolidColorBrush Color="White"></SolidColorBrush>
+                                    </Button.Foreground>
+                                </Button>
 
-                                    <Button Name="btnDonkerGeel" Background="Transparent" Height="75" Content="Geel" 
+                                <Button Name="btnDonkerGeel" Background="Transparent" Height="75" Content="Geel" 
                                             HorizontalAlignment="Stretch" Click="btnDonkerGeel_Click" Margin="5">
-                                        <Button.Template>
-                                            <ControlTemplate TargetType="Button">
-                                                <Border Name="borderRood" CornerRadius="5" Background="{TemplateBinding Background}" Opacity="0.8" BorderBrush="White" BorderThickness="3">
-                                                    <ContentPresenter HorizontalAlignment="Left" Margin="5" VerticalAlignment="Center"/>
-                                                </Border>
-                                            </ControlTemplate>
-                                        </Button.Template>
-                                        <Button.Foreground>
-                                            <SolidColorBrush Color="White"></SolidColorBrush>
-                                        </Button.Foreground>
-                                    </Button>
+                                    <Button.Template>
+                                        <ControlTemplate TargetType="Button">
+                                            <Border Name="borderRood" CornerRadius="5" Background="{TemplateBinding Background}" Opacity="0.8" BorderBrush="White" BorderThickness="3">
+                                                <ContentPresenter HorizontalAlignment="Left" Margin="5" VerticalAlignment="Center"/>
+                                            </Border>
+                                        </ControlTemplate>
+                                    </Button.Template>
+                                    <Button.Foreground>
+                                        <SolidColorBrush Color="White"></SolidColorBrush>
+                                    </Button.Foreground>
+                                </Button>
 
-                                    <Button Name="btnDonkerGroen" Background="Transparent" Height="75" Content="Groen" 
+                                <Button Name="btnDonkerGroen" Background="Transparent" Height="75" Content="Groen" 
                                             HorizontalAlignment="Stretch" Click="btnDonkerGroen_Click" Margin="5">
-                                        <Button.Template>
-                                            <ControlTemplate TargetType="Button">
-                                                <Border Name="borderRood" CornerRadius="5" Background="{TemplateBinding Background}" Opacity="0.8" BorderBrush="White" BorderThickness="3">
-                                                    <ContentPresenter HorizontalAlignment="Left" Margin="5" VerticalAlignment="Center"/>
-                                                </Border>
-                                            </ControlTemplate>
-                                        </Button.Template>
-                                        <Button.Foreground>
-                                            <SolidColorBrush Color="White"></SolidColorBrush>
-                                        </Button.Foreground>
-                                    </Button>
+                                    <Button.Template>
+                                        <ControlTemplate TargetType="Button">
+                                            <Border Name="borderRood" CornerRadius="5" Background="{TemplateBinding Background}" Opacity="0.8" BorderBrush="White" BorderThickness="3">
+                                                <ContentPresenter HorizontalAlignment="Left" Margin="5" VerticalAlignment="Center"/>
+                                            </Border>
+                                        </ControlTemplate>
+                                    </Button.Template>
+                                    <Button.Foreground>
+                                        <SolidColorBrush Color="White"></SolidColorBrush>
+                                    </Button.Foreground>
+                                </Button>
 
-                                    <Button Name="btnDonkerBlauw" Background="Transparent" Height="75" Content="Blauw" 
+                                <Button Name="btnDonkerBlauw" Background="Transparent" Height="75" Content="Blauw" 
                                             HorizontalAlignment="Stretch" Click="btnDonkerBlauw_Click" Margin="5">
-                                        <Button.Template>
-                                            <ControlTemplate TargetType="Button">
-                                                <Border Name="borderRood" CornerRadius="5" Background="{TemplateBinding Background}" Opacity="0.8" BorderBrush="White" BorderThickness="3">
-                                                    <ContentPresenter HorizontalAlignment="Left" Margin="5" VerticalAlignment="Center"/>
-                                                </Border>
-                                            </ControlTemplate>
-                                        </Button.Template>
-                                        <Button.Foreground>
-                                            <SolidColorBrush Color="White"></SolidColorBrush>
-                                        </Button.Foreground>
-                                    </Button>
+                                    <Button.Template>
+                                        <ControlTemplate TargetType="Button">
+                                            <Border Name="borderRood" CornerRadius="5" Background="{TemplateBinding Background}" Opacity="0.8" BorderBrush="White" BorderThickness="3">
+                                                <ContentPresenter HorizontalAlignment="Left" Margin="5" VerticalAlignment="Center"/>
+                                            </Border>
+                                        </ControlTemplate>
+                                    </Button.Template>
+                                    <Button.Foreground>
+                                        <SolidColorBrush Color="White"></SolidColorBrush>
+                                    </Button.Foreground>
+                                </Button>
 
-                                    <Button Name="btnDonkerPaars" Background="Transparent" Height="75" Content="Paars" 
+                                <Button Name="btnDonkerPaars" Background="Transparent" Height="75" Content="Paars" 
                                             HorizontalAlignment="Stretch" Click="btnDonkerPaars_Click" Margin="5">
-                                        <Button.Template>
-                                            <ControlTemplate TargetType="Button">
-                                                <Border Name="borderRood" CornerRadius="5" Background="{TemplateBinding Background}" Opacity="0.8" BorderBrush="White" BorderThickness="3">
-                                                    <ContentPresenter HorizontalAlignment="Left" Margin="5" VerticalAlignment="Center"/>
-                                                </Border>
-                                            </ControlTemplate>
-                                        </Button.Template>
-                                        <Button.Foreground>
-                                            <SolidColorBrush Color="White"></SolidColorBrush>
-                                        </Button.Foreground>
-                                    </Button>
+                                    <Button.Template>
+                                        <ControlTemplate TargetType="Button">
+                                            <Border Name="borderRood" CornerRadius="5" Background="{TemplateBinding Background}" Opacity="0.8" BorderBrush="White" BorderThickness="3">
+                                                <ContentPresenter HorizontalAlignment="Left" Margin="5" VerticalAlignment="Center"/>
+                                            </Border>
+                                        </ControlTemplate>
+                                    </Button.Template>
+                                    <Button.Foreground>
+                                        <SolidColorBrush Color="White"></SolidColorBrush>
+                                    </Button.Foreground>
+                                </Button>
 
-                                    <Button Name="btnDonkerRoze" Background="Transparent" Height="75" Content="Roze" 
+                                <Button Name="btnDonkerRoze" Background="Transparent" Height="75" Content="Roze" 
                                             HorizontalAlignment="Stretch" Click="btnDonkerRoze_Click" Margin="5">
-                                        <Button.Template>
-                                            <ControlTemplate TargetType="Button">
-                                                <Border Name="borderRood" CornerRadius="5" Background="{TemplateBinding Background}" Opacity="0.8" BorderBrush="White" BorderThickness="3">
-                                                    <ContentPresenter HorizontalAlignment="Left" Margin="5" VerticalAlignment="Center"/>
-                                                </Border>
-                                            </ControlTemplate>
-                                        </Button.Template>
-                                        <Button.Foreground>
-                                            <SolidColorBrush Color="White"></SolidColorBrush>
-                                        </Button.Foreground>
-                                    </Button>
+                                    <Button.Template>
+                                        <ControlTemplate TargetType="Button">
+                                            <Border Name="borderRood" CornerRadius="5" Background="{TemplateBinding Background}" Opacity="0.8" BorderBrush="White" BorderThickness="3">
+                                                <ContentPresenter HorizontalAlignment="Left" Margin="5" VerticalAlignment="Center"/>
+                                            </Border>
+                                        </ControlTemplate>
+                                    </Button.Template>
+                                    <Button.Foreground>
+                                        <SolidColorBrush Color="White"></SolidColorBrush>
+                                    </Button.Foreground>
+                                </Button>
 
-                            <Button Name="btnGrijs" Background="Transparent" Height="75" Content="Grijs" 
-                                    HorizontalAlignment="Stretch" Click="btnGrijs_Click" Margin="5">
-                                <Button.Template>
-                                    <ControlTemplate TargetType="Button">
-                                        <Border Name="borderRood" CornerRadius="5" Background="{TemplateBinding Background}" Opacity="0.8" BorderBrush="White" BorderThickness="3">
-                                            <ContentPresenter HorizontalAlignment="Left" Margin="5" VerticalAlignment="Center"/>
-                                        </Border>
-                                    </ControlTemplate>
-                                </Button.Template>
-                                <Button.Foreground>
-                                    <SolidColorBrush Color="White"></SolidColorBrush>
-                                </Button.Foreground>
-                            </Button>
+                                <Button Name="btnPastel" Background="Transparent" Height="75" Content="Pastel" 
+                                    HorizontalAlignment="Stretch" Click="btnPastel_Click" Margin="5">
+                                    <Button.Template>
+                                        <ControlTemplate TargetType="Button">
+                                            <Border Name="borderRood" CornerRadius="5" Background="{TemplateBinding Background}" Opacity="0.8" BorderBrush="White" BorderThickness="3">
+                                                <ContentPresenter HorizontalAlignment="Left" Margin="5" VerticalAlignment="Center"/>
+                                            </Border>
+                                        </ControlTemplate>
+                                    </Button.Template>
+                                    <Button.Foreground>
+                                        <SolidColorBrush Color="White"></SolidColorBrush>
+                                    </Button.Foreground>
+                                </Button>
 
-                            <Button Name="btnDonkerStatischeRegenboog" Background="Transparent" Height="75" Content="Regenboog" 
+                                <Button Name="btnDonkerStatischeRegenboog" Background="Transparent" Height="75" Content="Regenboog" 
                                     HorizontalAlignment="Stretch" Click="btnDonkerStatischeRegenboog_Click" Margin="5">
-                                        <Button.Template>
-                                            <ControlTemplate TargetType="Button">
-                                                <Border Name="borderRood" CornerRadius="5" Background="{TemplateBinding Background}" Opacity="0.8" BorderBrush="White" BorderThickness="3">
-                                                    <ContentPresenter HorizontalAlignment="Left" Margin="5" VerticalAlignment="Center"/>
-                                                </Border>
-                                            </ControlTemplate>
-                                        </Button.Template>
-                                        <Button.Foreground>
-                                            <SolidColorBrush Color="White"></SolidColorBrush>
-                                        </Button.Foreground>
-                                    </Button>
+                                    <Button.Template>
+                                        <ControlTemplate TargetType="Button">
+                                            <Border Name="borderRood" CornerRadius="5" Background="{TemplateBinding Background}" Opacity="0.8" BorderBrush="White" BorderThickness="3">
+                                                <ContentPresenter HorizontalAlignment="Left" Margin="5" VerticalAlignment="Center"/>
+                                            </Border>
+                                        </ControlTemplate>
+                                    </Button.Template>
+                                    <Button.Foreground>
+                                        <SolidColorBrush Color="White"></SolidColorBrush>
+                                    </Button.Foreground>
+                                </Button>
 
-                                </UniformGrid>
+                            </UniformGrid>
 
-                            </GroupBox>
+                        </GroupBox>
 
-                    <GroupBox Name="grpbxAnimaties" Header="Animaties" Margin="5,30,5,30" BorderBrush="White" FontFamily="Montserrat" 
+
+
+
+                        <GroupBox Name="grpbxAnimaties" Header="Dynamische en Statische Multikleurige Overgangen" Margin="5,30,5,30" BorderBrush="White" FontFamily="Montserrat" 
                               FontWeight="Bold" Foreground="White" FontSize="25" BorderThickness="1">
+                            <UniformGrid Columns="9" HorizontalAlignment="Stretch">
 
-                        <StackPanel Orientation="Horizontal">
-                            <Button Name="btnRegenboog" Background="Transparent" Width="200" Height="75" Content="Regenboog" 
-                                HorizontalAlignment="Stretch" Click="btnRainbowCycle_Click" Margin="5,30,5,30">
-                                <Button.Template>
-                                    <ControlTemplate TargetType="Button">
-                                        <Border Name="borderWit" CornerRadius="5" Background="{TemplateBinding Background}" Opacity="0.8" BorderBrush="White" 
-                                                BorderThickness="3">
-                                            <ContentPresenter HorizontalAlignment="Left" Margin="5" VerticalAlignment="Center"/>
-                                        </Border>
-                                    </ControlTemplate>
-                                </Button.Template>
-                                <Button.Foreground>
-                                    <SolidColorBrush Color="White"></SolidColorBrush>
-                                </Button.Foreground>
-                            </Button>
+                                <Button Name="btnRegenboog" Background="Transparent" Height="75" Content="Regenboog" 
+                                        HorizontalAlignment="Stretch" Click="btnRainbowCycle_Click" Margin="5">
+                                    <Button.Template>
+                                        <ControlTemplate TargetType="Button">
+                                            <Border Name="borderRood" CornerRadius="5" Background="{TemplateBinding Background}" Opacity="0.8" BorderBrush="White" BorderThickness="3">
+                                                <ContentPresenter HorizontalAlignment="Left" Margin="5" VerticalAlignment="Center"/>
+                                            </Border>
+                                        </ControlTemplate>
+                                    </Button.Template>
+                                    <Button.Foreground>
+                                        <SolidColorBrush Color="White"></SolidColorBrush>
+                                    </Button.Foreground>
+                                </Button>
 
-                        </StackPanel>
+                                <Button Name="btnBlauwRood" Background="Transparent" Height="75" Content="Blauw -> Rood" 
+                                        HorizontalAlignment="Stretch" Click="btnBlauwRood_Click" Margin="5,30,5,30">
+                                    <Button.Template>
+                                        <ControlTemplate TargetType="Button">
+                                            <Border Name="borderWit" CornerRadius="5" Background="{TemplateBinding Background}" Opacity="0.8" BorderBrush="White" 
+                                                    BorderThickness="3">
+                                                <ContentPresenter HorizontalAlignment="Left" Margin="5" VerticalAlignment="Center"/>
+                                            </Border>
+                                        </ControlTemplate>
+                                    </Button.Template>
+                                    <Button.Foreground>
+                                        <SolidColorBrush Color="White"></SolidColorBrush>
+                                    </Button.Foreground>
+                                </Button>
 
-                    </GroupBox>
+                                <Button Name="btnGroenBlauw" Background="Transparent" Height="75" Content="Groen -> Blauw" 
+                                        HorizontalAlignment="Stretch" Click="btnGroenBlauw_Click" Margin="5,30,5,30">
+                                    <Button.Template>
+                                        <ControlTemplate TargetType="Button">
+                                            <Border Name="borderWit" CornerRadius="5" Background="{TemplateBinding Background}" Opacity="0.8" BorderBrush="White" 
+                                                    BorderThickness="3">
+                                                <ContentPresenter HorizontalAlignment="Left" Margin="5" VerticalAlignment="Center"/>
+                                            </Border>
+                                        </ControlTemplate>
+                                    </Button.Template>
+                                    <Button.Foreground>
+                                        <SolidColorBrush Color="White"></SolidColorBrush>
+                                    </Button.Foreground>
+                                </Button>
 
-                </UniformGrid>
+                                <Button Name="btnSmoothPastel" Background="Transparent" Height="75" Content="Smooth Pastel" 
+                                        HorizontalAlignment="Stretch" Click="btnSmoothPastel_Click" Margin="5,30,5,30">
+                                    <Button.Template>
+                                        <ControlTemplate TargetType="Button">
+                                            <Border Name="borderWit" CornerRadius="5" Background="{TemplateBinding Background}" Opacity="0.8" BorderBrush="White" 
+                                                    BorderThickness="3">
+                                                <ContentPresenter HorizontalAlignment="Left" Margin="5" VerticalAlignment="Center"/>
+                                            </Border>
+                                        </ControlTemplate>
+                                    </Button.Template>
+                                    <Button.Foreground>
+                                        <SolidColorBrush Color="White"></SolidColorBrush>
+                                    </Button.Foreground>
+                                </Button>
 
-            </GroupBox>
+                                <Button Name="btnSoon1" Background="Transparent" Height="75" Content="Soon 1" 
+                                        HorizontalAlignment="Stretch" Click="btnSoon1_Click" Margin="5,30,5,30">
+                                    <Button.Template>
+                                        <ControlTemplate TargetType="Button">
+                                            <Border Name="borderWit" CornerRadius="5" Background="{TemplateBinding Background}" Opacity="0.8" BorderBrush="White" 
+                                                    BorderThickness="3">
+                                                <ContentPresenter HorizontalAlignment="Left" Margin="5" VerticalAlignment="Center"/>
+                                            </Border>
+                                        </ControlTemplate>
+                                    </Button.Template>
+                                    <Button.Foreground>
+                                        <SolidColorBrush Color="White"></SolidColorBrush>
+                                    </Button.Foreground>
+                                </Button>
 
-        </StackPanel>
+                                <Button Name="btnSoon2" Background="Transparent" Height="75" Content="Soon 2" 
+                                        HorizontalAlignment="Stretch" Click="btnSoon2_Click" Margin="5,30,5,30">
+                                    <Button.Template>
+                                        <ControlTemplate TargetType="Button">
+                                            <Border Name="borderWit" CornerRadius="5" Background="{TemplateBinding Background}" Opacity="0.8" BorderBrush="White" 
+                                                    BorderThickness="3">
+                                                <ContentPresenter HorizontalAlignment="Left" Margin="5" VerticalAlignment="Center"/>
+                                            </Border>
+                                        </ControlTemplate>
+                                    </Button.Template>
+                                    <Button.Foreground>
+                                        <SolidColorBrush Color="White"></SolidColorBrush>
+                                    </Button.Foreground>
+                                </Button>
+                                <Button Name="btnSoon3" Background="Transparent" Height="75" Content="Soon 3" 
+                                        HorizontalAlignment="Stretch" Click="btnSoon3_Click" Margin="5,30,5,30">
+                                    <Button.Template>
+                                        <ControlTemplate TargetType="Button">
+                                            <Border Name="borderWit" CornerRadius="5" Background="{TemplateBinding Background}" Opacity="0.8" BorderBrush="White" 
+                                                    BorderThickness="3">
+                                                <ContentPresenter HorizontalAlignment="Left" Margin="5" VerticalAlignment="Center"/>
+                                            </Border>
+                                        </ControlTemplate>
+                                    </Button.Template>
+                                    <Button.Foreground>
+                                        <SolidColorBrush Color="White"></SolidColorBrush>
+                                    </Button.Foreground>
+                                </Button>
 
-    </Grid>
+                                <Button Name="btnSoon4" Background="Transparent" Height="75" Content="Soon 4" 
+                                        HorizontalAlignment="Stretch" Click="btnSoon4_Click" Margin="5,30,5,30">
+                                    <Button.Template>
+                                        <ControlTemplate TargetType="Button">
+                                            <Border Name="borderWit" CornerRadius="5" Background="{TemplateBinding Background}" Opacity="0.8" BorderBrush="White" 
+                                                    BorderThickness="3">
+                                                <ContentPresenter HorizontalAlignment="Left" Margin="5" VerticalAlignment="Center"/>
+                                            </Border>
+                                        </ControlTemplate>
+                                    </Button.Template>
+                                    <Button.Foreground>
+                                        <SolidColorBrush Color="White"></SolidColorBrush>
+                                    </Button.Foreground>
+                                </Button>
+
+                                <Button Name="btnSoon5" Background="Transparent" Height="75" Content="Soon 5" 
+                                        HorizontalAlignment="Stretch" Click="btnSoon5_Click" Margin="5,30,5,30">
+                                    <Button.Template>
+                                        <ControlTemplate TargetType="Button">
+                                            <Border Name="borderWit" CornerRadius="5" Background="{TemplateBinding Background}" Opacity="0.8" BorderBrush="White" 
+                                                    BorderThickness="3">
+                                                <ContentPresenter HorizontalAlignment="Left" Margin="5" VerticalAlignment="Center"/>
+                                            </Border>
+                                        </ControlTemplate>
+                                    </Button.Template>
+                                    <Button.Foreground>
+                                        <SolidColorBrush Color="White"></SolidColorBrush>
+                                    </Button.Foreground>
+                                </Button>
+
+                            </UniformGrid>
+
+                        </GroupBox>
+
+                    </UniformGrid>
+
+                </GroupBox>
+
+            </StackPanel>
+
+        </Grid>
+    </ScrollViewer>
 </Window>
 
