@@ -193,7 +193,8 @@ namespace Eindwerk_Milan_LED_strip
                 btnWit, btnDonkerRood, btnDonkerOranje, btnDonkerGeel, btnDonkerGroen,
                 btnDonkerBlauw, btnDonkerPaars, btnDonkerRoze, btnPastel,
                 btnDonkerStatischeRegenboog, btnRegenboog, btnBlauwRood, btnGroenBlauw,
-                btnSmoothPastel
+                btnSmoothPastel, btnGroenBlauw, btnGeelRood, btnBlauwRoze, btnKerstmis, 
+                btnOranjeRoze, btnGeelBlauw 
             };
 
             foreach (var knop in knoppen)
@@ -379,37 +380,38 @@ namespace Eindwerk_Milan_LED_strip
             => AchtergrondRegenboogKnoppenVeranderen(sender, e, "V", btnRegenboog, 0.9);
 
         private void btnBlauwRood_Click(object sender, RoutedEventArgs e)
-            => AchtergrondKleurKnoppenVeranderen(sender, e, "W", btnBlauwRood, Color.FromRgb(0, 0, 255), Color.FromRgb(255, 0, 0));
+            => AchtergrondKleurKnoppenVeranderen(sender, e, "W", btnBlauwRood, Color.FromRgb(255, 0, 0), Color.FromRgb(0, 80, 255));
 
         private void btnGroenBlauw_Click(object sender, RoutedEventArgs e)
-            => AchtergrondKleurKnoppenVeranderen(sender, e, "X", btnGroenBlauw, Color.FromRgb(0, 255, 0), Color.FromRgb(0, 0, 255));
+            => AchtergrondKleurKnoppenVeranderen(sender, e, "X", btnGroenBlauw, Color.FromRgb(0, 255, 0), Color.FromRgb(0, 80, 255));
 
+        private void btnGeelBlauw_Click(object sender, RoutedEventArgs e)
+            => AchtergrondKleurKnoppenVeranderen(sender, e, "Y", btnGeelBlauw, Color.FromRgb(0, 80, 255), Color.FromRgb(255, 180, 0));
+
+        private void btnOranjeRoze_Click(object sender, RoutedEventArgs e)
+            => AchtergrondKleurKnoppenVeranderen(sender, e, "Z", btnOranjeRoze, Color.FromRgb(255, 10, 255) , Color.FromRgb(255, 200, 0));
+
+        private void btnGeelRood_Click(object sender, RoutedEventArgs e)
+            => AchtergrondKleurKnoppenVeranderen(sender, e, "0", btnGeelRood, Color.FromRgb(255, 180, 0), Color.FromRgb(255, 0, 0));
+
+        private void btnBlauwRoze_Click(object sender, RoutedEventArgs e)
+            => AchtergrondKleurKnoppenVeranderen(sender, e, "1", btnBlauwRoze, Color.FromRgb(255, 10, 255) , Color.FromRgb(0, 50, 255));
+
+        private void btnKerstmis_Click(object sender, RoutedEventArgs e)
+        {
+            SendCommand("2");
+            KnoppenTransparant();
+            LinearGradientBrush gradientBrush = new LinearGradientBrush();
+            gradientBrush.StartPoint = new Point(0, 0);
+            gradientBrush.EndPoint = new Point(1, 1);
+
+            gradientBrush.GradientStops.Add(new GradientStop(Color.FromRgb(220, 15, 0), 1));    // Pastel Paars
+            gradientBrush.GradientStops.Add(new GradientStop(Color.FromRgb(200, 200, 200), 0.5)); // Pastel Blauw
+            gradientBrush.GradientStops.Add(new GradientStop(Color.FromRgb(0, 255, 0), 0)); // Pastel Groen
+            gradientBrush.Opacity = 0.8;
+            ((Button)sender).Background = gradientBrush;
+        }
         private void btnSmoothPastel_Click(object sender, RoutedEventArgs e)
-            => AchtergrondKleurKnoppenVeranderen(sender, e, "Y", btnSmoothPastel, Color.FromRgb(0, 200, 255), Color.FromRgb(255, 180, 0));
-
-        private void btnSoon1_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void btnSoon2_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void btnSoon3_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void btnSoon4_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void btnSoon5_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
+            => AchtergrondKleurKnoppenVeranderen(sender, e, "3", btnSmoothPastel, Color.FromRgb(0, 200, 255), Color.FromRgb(255, 180, 0));
     }
 }
