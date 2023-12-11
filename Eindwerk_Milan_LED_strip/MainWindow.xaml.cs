@@ -13,11 +13,25 @@ namespace Eindwerk_Milan_LED_strip
     {
         private SerialPort _serialPort;
         bool ledStripActief = false;
+
+        // Nieuwe klasse toevoegen (doet vrij weinig maar is last minute klasse, kan later nog iets mee gedaan worden)
+        public class LedStripController
+        {
+            private MainWindow _mainWindow;
+
+            public LedStripController(MainWindow mainWindow)
+            {
+                _mainWindow = mainWindow;
+            }
+        }
+
+        private LedStripController _ledStripController;
         public MainWindow()
         {
             InitializeComponent();
 
             _serialPort = new SerialPort();
+            _ledStripController = new LedStripController(this);
 
             // Voeg "None" toe aan de combobox
             cbxComPorts.Items.Add("None");
@@ -193,8 +207,8 @@ namespace Eindwerk_Milan_LED_strip
                 btnWit, btnDonkerRood, btnDonkerOranje, btnDonkerGeel, btnDonkerGroen,
                 btnDonkerBlauw, btnDonkerPaars, btnDonkerRoze, btnPastel,
                 btnDonkerStatischeRegenboog, btnRegenboog, btnBlauwRood, btnGroenBlauw,
-                btnSmoothPastel, btnGroenBlauw, btnGeelRood, btnBlauwRoze, btnKerstmis, 
-                btnOranjeRoze, btnGeelBlauw 
+                btnSmoothPastel, btnGroenBlauw, btnGeelRood, btnBlauwRoze, btnKerstmis,
+                btnOranjeRoze, btnGeelBlauw
             };
 
             foreach (var knop in knoppen)
@@ -389,13 +403,13 @@ namespace Eindwerk_Milan_LED_strip
             => AchtergrondKleurKnoppenVeranderen(sender, e, "Y", btnGeelBlauw, Color.FromRgb(0, 80, 255), Color.FromRgb(255, 180, 0));
 
         private void btnOranjeRoze_Click(object sender, RoutedEventArgs e)
-            => AchtergrondKleurKnoppenVeranderen(sender, e, "Z", btnOranjeRoze, Color.FromRgb(255, 10, 255) , Color.FromRgb(255, 200, 0));
+            => AchtergrondKleurKnoppenVeranderen(sender, e, "Z", btnOranjeRoze, Color.FromRgb(255, 10, 255), Color.FromRgb(255, 200, 0));
 
         private void btnGeelRood_Click(object sender, RoutedEventArgs e)
             => AchtergrondKleurKnoppenVeranderen(sender, e, "0", btnGeelRood, Color.FromRgb(255, 180, 0), Color.FromRgb(255, 0, 0));
 
         private void btnBlauwRoze_Click(object sender, RoutedEventArgs e)
-            => AchtergrondKleurKnoppenVeranderen(sender, e, "1", btnBlauwRoze, Color.FromRgb(255, 10, 255) , Color.FromRgb(0, 50, 255));
+            => AchtergrondKleurKnoppenVeranderen(sender, e, "1", btnBlauwRoze, Color.FromRgb(255, 10, 255), Color.FromRgb(0, 50, 255));
 
         private void btnKerstmis_Click(object sender, RoutedEventArgs e)
         {

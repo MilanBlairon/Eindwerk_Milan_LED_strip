@@ -2,8 +2,15 @@
 <ClassDiagram MajorVersion="1" MinorVersion="1">
   <Class Name="Eindwerk_Milan_LED_strip.MainWindow">
     <Position X="2" Y="2.5" Width="1.5" />
+    <NestedTypes>
+      <Class Name="Eindwerk_Milan_LED_strip.MainWindow.LedStripController" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>MainWindow.xaml.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+    </NestedTypes>
     <TypeIdentifier>
-      <HashCode>AAQAAAAAAABAAAAAABAAIjAQQCAAAAIASAAAUAAAAAA=</HashCode>
+      <HashCode>AgAAAEQAABBIQBBIBBBBYqgEwiAkAAIASIAIFAABACA=</HashCode>
       <FileName>MainWindow.xaml.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
